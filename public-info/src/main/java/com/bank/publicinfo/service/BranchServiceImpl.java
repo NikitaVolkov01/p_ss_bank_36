@@ -21,7 +21,6 @@ public class BranchServiceImpl implements BranchService {
 
     @Override
     public Branch findOne(Long id) {
-        Optional<Branch> foundPerson = branchRepository.findById(id);
         return branchRepository.findById(id).orElseThrow(NotFoundException::new);
     }
 
