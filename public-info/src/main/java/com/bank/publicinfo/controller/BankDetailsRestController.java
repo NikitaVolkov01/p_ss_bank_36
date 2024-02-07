@@ -42,7 +42,7 @@ public class BankDetailsRestController {
     }
 
     @Operation(description = "Метод findAllBankDetails выдает все записи из таблицы bank_details")
-    @GetMapping("/bankDetails")
+    @GetMapping()
     public List<BankDetailsDTO> findAllBankDetails() {
         return bankDetailsService.findAll().stream().map(BankDetailsMapper.INSTANCE::toDto).toList();
     }

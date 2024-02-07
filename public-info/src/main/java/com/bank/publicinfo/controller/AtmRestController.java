@@ -25,7 +25,7 @@ import java.util.List;
 
 @Tag(name = "Atm REST Controller", description = "Контроллер с CRUD операциями для Atm")
 @RestController
-@RequestMapping("/atm")
+@RequestMapping("/atms")
 public class AtmRestController {
 
     private final AtmService atmService;
@@ -42,7 +42,7 @@ public class AtmRestController {
     }
 
     @Operation(description = "Метод findAllAtms выдает все записи из таблицы atm")
-    @GetMapping("/atms")
+    @GetMapping()
     public List<AtmDTO> findAllAtms() {
         return atmService.findAll().stream().map(AtmMapper.INSTANCE::toDto).toList();
     }

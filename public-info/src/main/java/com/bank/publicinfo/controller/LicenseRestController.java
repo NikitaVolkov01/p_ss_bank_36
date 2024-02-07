@@ -25,7 +25,7 @@ import java.util.List;
 
 @Tag(name = "License REST Controller", description = "Контроллер с CRUD операциями для License")
 @RestController
-@RequestMapping("/license")
+@RequestMapping("/licenses")
 public class LicenseRestController {
 
     private final LicenseService licenseService;
@@ -42,7 +42,7 @@ public class LicenseRestController {
     }
 
     @Operation(description = "Метод findAllLicenses выдает все записи из таблицы license")
-    @GetMapping("/licenses")
+    @GetMapping()
     public List<LicenseDTO> findAllLicenses() {
         return licenseService.findAll().stream().map(LicenseMapper.INSTANCE::toDto).toList();
     }

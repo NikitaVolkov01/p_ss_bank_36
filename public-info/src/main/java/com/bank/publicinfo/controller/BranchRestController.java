@@ -25,7 +25,7 @@ import java.util.List;
 
 @Tag(name = "Branch REST Controller", description = "Контроллер с CRUD операциями для Branch")
 @RestController
-@RequestMapping("/branch")
+@RequestMapping("/branches")
 public class BranchRestController {
 
     private final BranchService branchService;
@@ -42,7 +42,7 @@ public class BranchRestController {
     }
 
     @Operation(description = "Метод findAllBranches выдает все записи из таблицы branch")
-    @GetMapping("/branches")
+    @GetMapping()
     public List<BranchDTO> findAllBranches() {
         return branchService.findAll().stream().map(BranchMapper.INSTANCE::toDto).toList();
     }

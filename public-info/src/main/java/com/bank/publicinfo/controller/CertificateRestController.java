@@ -25,7 +25,7 @@ import java.util.List;
 
 @Tag(name = "Certificate REST Controller", description = "Контроллер с CRUD операциями для Certificate")
 @RestController
-@RequestMapping("/certificate")
+@RequestMapping("/certificates")
 public class CertificateRestController {
 
     private final CertificateService certificateService;
@@ -42,7 +42,7 @@ public class CertificateRestController {
     }
 
     @Operation(description = "Метод findAllCertificates выдает все записи из таблицы certificate")
-    @GetMapping("/certificates")
+    @GetMapping()
     public List<CertificateDTO> findAllCertificates() {
         return certificateService.findAll().stream().map(CertificateMapper.INSTANCE::toDto).toList();
     }
