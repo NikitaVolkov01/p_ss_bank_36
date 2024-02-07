@@ -15,4 +15,5 @@ public interface BranchService {
     void delete(Long id);
 
     void update(Long id, Branch branch);
+
 }

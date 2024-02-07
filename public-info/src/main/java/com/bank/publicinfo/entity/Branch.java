@@ -1,11 +1,14 @@
 package com.bank.publicinfo.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.OneToMany;
 import javax.validation.constraints.Max;
 import java.time.LocalTime;
 import java.util.List;
@@ -32,7 +35,7 @@ public class Branch {
 
     @Max(value = 250)
     @Column(name = "city")
-    private String City;
+    private String city;
 
     @Column(name = "start_of_work")
     private LocalTime startOfWork;
@@ -42,4 +45,5 @@ public class Branch {
 
     @OneToMany(mappedBy = "branch")
     private List<Atm> atms;
+
 }

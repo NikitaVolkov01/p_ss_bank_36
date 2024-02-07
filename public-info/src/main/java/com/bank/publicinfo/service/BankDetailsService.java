@@ -16,5 +16,4 @@ public interface BankDetailsService {
 
     void delete(Long id);
 
-
 }

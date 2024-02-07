@@ -1,7 +1,9 @@
 package com.bank.publicinfo.controller;
 
+import com.bank.publicinfo.dto.CertificateDTO;
 import com.bank.publicinfo.entity.Certificate;
 import com.bank.publicinfo.exception.NotFoundException;
+import com.bank.publicinfo.mapper.CertificateMapper;
 import com.bank.publicinfo.service.CertificateService;
 import com.bank.publicinfo.util.ErrorResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +11,15 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
 
@@ -27,27 +37,29 @@ public class CertificateRestController {
 
     @Operation(description = "Метод findOneCertificate выдает одну запись по ее id из таблицы certificate")
     @GetMapping("/{id}")
-    public Certificate findOneCertificate(@PathVariable Long id) {
-        return certificateService.findOne(id);
+    public CertificateDTO findOneCertificate(@PathVariable Long id) {
+        return CertificateMapper.INSTANCE.toDto(certificateService.findOne(id));
     }
 
     @Operation(description = "Метод findAllCertificates выдает все записи из таблицы certificate")
     @GetMapping("/certificates")
-    public List<Certificate> findAllCertificates() {
-        return certificateService.findAll();
+    public List<CertificateDTO> findAllCertificates() {
+        return certificateService.findAll().stream().map(CertificateMapper.INSTANCE::toDto).toList();
     }
 
     @Operation(description = "Метод createCertificate создает запись в таблицe certificate")
     @PostMapping
-    public ResponseEntity<HttpStatus> createCertificate(@RequestBody Certificate certificate) {
-        certificateService.save(certificate);
+    public ResponseEntity<HttpStatus> createCertificate(@RequestBody CertificateDTO certificateDTO) {
+        Certificate result = CertificateMapper.INSTANCE.toEntity(certificateDTO);
+        certificateService.save(result);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
     @Operation(description = "Метод updateCertificate обновляет запись в таблице certificate по ее id")
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> updateCertificate(@PathVariable Long id, @RequestBody Certificate certificate) {
-        certificateService.update(id, certificate);
+    public ResponseEntity<HttpStatus> updateCertificate(@PathVariable Long id, @RequestBody CertificateDTO certificateDTO) {
+        Certificate result = CertificateMapper.INSTANCE.toEntity(certificateDTO);
+        certificateService.update(id, result);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

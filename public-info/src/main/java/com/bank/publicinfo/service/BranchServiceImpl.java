@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class BranchServiceImpl implements BranchService {
@@ -40,7 +39,7 @@ public class BranchServiceImpl implements BranchService {
             branch.setId(id);
             branchRepository.save(branch);
         } else {
-            throw new IllegalArgumentException("Branch with id " + id + " does not exist");
+            throw new IllegalArgumentException("Certificate with id " + id + " does not exist");
         }
     }
 

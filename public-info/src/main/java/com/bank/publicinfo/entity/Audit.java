@@ -5,7 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.Max;
 import java.time.OffsetDateTime;
 
@@ -49,4 +54,5 @@ public class Audit {
 
     @Column(name = "entity_json")
     private String entityJson;
+
 }
