@@ -22,7 +22,6 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "audit", schema = "public_bank_information")
-@Component
 public class Audit {
 
     @Id
