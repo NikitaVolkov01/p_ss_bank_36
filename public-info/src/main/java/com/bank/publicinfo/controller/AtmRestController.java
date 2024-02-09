@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Tag(name = "Atm REST Controller", description = "Контроллер с CRUD операциями для Atm")
@@ -51,7 +52,14 @@ public class AtmRestController {
     @PostMapping
     public ResponseEntity<HttpStatus> createAtm(@RequestBody AtmDTO atmDTO) {
         Atm result = AtmMapper.INSTANCE.toEntity(atmDTO);
-        atmService.save(result);
+        long minutesBetween = ChronoUnit.MINUTES.between(result.getEnd_of_work(), result.getStart_of_work());
+        if (minutesBetween == 0) {
+            result.setAll_hours(true);
+            atmService.save(result);
+        } else {
+            result.setAll_hours(false);
+            atmService.save(result);
+        }
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
@@ -59,7 +67,14 @@ public class AtmRestController {
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> updateAtm(@PathVariable Long id, @RequestBody AtmDTO atmDTO) {
         Atm result = AtmMapper.INSTANCE.toEntity(atmDTO);
-        atmService.update(id, result);
+        long minutesBetween = ChronoUnit.MINUTES.between(result.getEnd_of_work(), result.getStart_of_work());
+        if (minutesBetween == 0) {
+            result.setAll_hours(true);
+            atmService.update(id, result);
+        } else {
+            result.setAll_hours(false);
+            atmService.update(id, result);
+        }
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
