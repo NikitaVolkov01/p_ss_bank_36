@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Max;
+import java.sql.Timestamp;
 import java.time.OffsetDateTime;
 
 @Entity
@@ -20,6 +22,7 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor
 @Builder
 @Table(name = "audit", schema = "public_bank_information")
+@Component
 public class Audit {
 
     @Id
@@ -44,10 +47,10 @@ public class Audit {
     private String modifiedBy;
 
     @Column(name = "created_at")
-    private OffsetDateTime createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "modified_at")
-    private OffsetDateTime modifiedAt;
+    private Timestamp modifiedAt;
 
     @Column(name = "new_entity_json")
     private String newEntityJson;
