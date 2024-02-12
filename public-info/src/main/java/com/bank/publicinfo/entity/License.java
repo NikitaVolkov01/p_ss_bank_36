@@ -35,5 +35,4 @@ public class License {
     @ManyToOne
     @JoinColumn(name = "bank_details_id", referencedColumnName = "id")
     private BankDetails bankDetails;
-
 }
