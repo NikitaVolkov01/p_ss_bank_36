@@ -1,8 +1,8 @@
 package com.bank.publicinfo.aop;
 
 import com.bank.publicinfo.entity.Audit;
-import com.bank.publicinfo.exception.NotFoundException;
 import com.bank.publicinfo.service.AuditService;
+import com.bank.publicinfo.util.UtilStrings;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -19,13 +19,16 @@ public class AuditAspect {
 
     private final AuditService auditService;
     private final ObjectMapper objectMapper;
+
+    private final UtilStrings utilStrings;
     private Timestamp createdAt;
     private String createdBy;
 
     @Autowired
-    public AuditAspect(AuditService auditService, ObjectMapper objectMapper) {
+    public AuditAspect(AuditService auditService, ObjectMapper objectMapper, UtilStrings utilStrings) {
         this.auditService = auditService;
         this.objectMapper = objectMapper;
+        this.utilStrings = utilStrings;
     }
 
     @AfterReturning("com.bank.publicinfo.aop.Pointcuts.allSaveMethods() && args(entity)")
@@ -34,12 +37,13 @@ public class AuditAspect {
             Audit audit = new Audit();
             audit.setEntityType(entity.getClass().getSimpleName());
             audit.setOperationType("CREATE");
-            audit.setCreatedBy("postgres");
+            audit.setCreatedBy(utilStrings.getDbUsername());
             createdBy = audit.getCreatedBy();
             audit.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             createdAt = audit.getCreatedAt();
             audit.setEntityJson(objectMapper.writeValueAsString(entity));
             auditService.createAudit(audit);
+
         }
     }
 
@@ -50,7 +54,7 @@ public class AuditAspect {
             audit.setEntityType(entity.getClass().getSimpleName());
             audit.setOperationType("UPDATE");
             audit.setCreatedBy(createdBy);
-            audit.setModifiedBy("postgres");
+            audit.setModifiedBy(utilStrings.getDbUsername());
             audit.setCreatedAt(createdAt);
             audit.setModifiedAt(new Timestamp(System.currentTimeMillis()));
             audit.setNewEntityJson(objectMapper.writeValueAsString(entity));
@@ -78,13 +82,12 @@ public class AuditAspect {
     public void entityDelete(Object entity, Long id) {
         if (id != null) {
             Audit audit = new Audit();
-            audit.setEntityType(entity.getClass().getName());
+            audit.setEntityType(entity.getClass().getSimpleName());
             audit.setOperationType("DELETE");
-            audit.setCreatedBy("postgres");
+            audit.setCreatedBy(utilStrings.getDbUsername());
             audit.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             audit.setEntityJson("Deleted entity with id: " + id);
             auditService.createAudit(audit);
         }
-        throw new NotFoundException();
     }
 }
