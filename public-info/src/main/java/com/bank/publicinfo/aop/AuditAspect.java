@@ -19,7 +19,6 @@ public class AuditAspect {
 
     private final AuditService auditService;
     private final ObjectMapper objectMapper;
-
     private final UtilStrings utilStrings;
     private Timestamp createdAt;
     private String createdBy;
@@ -43,7 +42,6 @@ public class AuditAspect {
             createdAt = audit.getCreatedAt();
             audit.setEntityJson(objectMapper.writeValueAsString(entity));
             auditService.createAudit(audit);
-
         }
     }
 
@@ -55,6 +53,7 @@ public class AuditAspect {
             audit.setOperationType("UPDATE");
             audit.setCreatedBy(createdBy);
             audit.setModifiedBy(utilStrings.getDbUsername());
+            audit.setCreatedBy(utilStrings.getDbUsername());
             audit.setCreatedAt(createdAt);
             audit.setModifiedAt(new Timestamp(System.currentTimeMillis()));
             audit.setNewEntityJson(objectMapper.writeValueAsString(entity));

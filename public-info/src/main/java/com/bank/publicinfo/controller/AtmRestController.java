@@ -38,8 +38,8 @@ public class AtmRestController {
 
     @Operation(description = "Метод findOneAtm выдает одну запись по ее id из таблицы atm")
     @GetMapping("/{id}")
-    public AtmDTO findOneAtm(@PathVariable Long id) {
-        return AtmMapper.INSTANCE.toDto(atmService.findOne(id));
+    public ResponseEntity<AtmDTO> findOneAtm(@PathVariable Long id) {
+        return new ResponseEntity<>(AtmMapper.INSTANCE.toDto(atmService.findOne(id)), HttpStatus.OK);
     }
 
     @Operation(description = "Метод findAllAtms выдает все записи из таблицы atm")

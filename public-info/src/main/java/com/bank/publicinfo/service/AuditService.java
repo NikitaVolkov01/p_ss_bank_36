@@ -8,7 +8,5 @@ public interface AuditService {
 
     void createAudit(Audit audit);
 
-    List<Audit> getSpecialAudit(String entityType, String operationType);
-
     List<String> searchCustom();
 }

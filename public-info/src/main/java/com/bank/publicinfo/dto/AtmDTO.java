@@ -1,11 +1,22 @@
 package com.bank.publicinfo.dto;
 
 import com.bank.publicinfo.entity.Branch;
-import lombok.Data;
+
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import java.time.LocalTime;
 
-@Data
+@EqualsAndHashCode
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class AtmDTO {
 
     private String address;

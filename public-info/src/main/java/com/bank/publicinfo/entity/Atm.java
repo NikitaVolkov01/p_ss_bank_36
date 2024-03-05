@@ -2,9 +2,11 @@ package com.bank.publicinfo.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.NoArgsConstructor;
+import lombok.Builder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,7 +20,9 @@ import javax.validation.constraints.Max;
 import java.time.LocalTime;
 
 @Entity
-@Data
+@EqualsAndHashCode
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -47,5 +51,4 @@ public class Atm {
     @ManyToOne
     @JoinColumn(name = "branch_id", referencedColumnName = "id")
     private Branch branch;
-
 }

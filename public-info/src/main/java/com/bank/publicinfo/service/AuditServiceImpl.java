@@ -23,11 +23,6 @@ public class AuditServiceImpl implements AuditService {
     }
 
     @Override
-    public List<Audit> getSpecialAudit(String entityType, String operationType) {
-        return auditRepository.findAuditByEntityTypeAndOperationType(entityType,operationType);
-    }
-
-    @Override
     public List<String> searchCustom() {
         return auditRepository.searchCustom();
     }
