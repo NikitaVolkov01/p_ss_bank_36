@@ -9,8 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class AuditAspectTest {
@@ -31,19 +34,19 @@ public class AuditAspectTest {
     @Test
     public void entityCreate() throws JsonProcessingException {
         auditAspect.entityCreate(getEntity());
-        Mockito.verify(auditService, Mockito.times(1)).createAudit(Mockito.any(Audit.class));
+        verify(auditService, times(1)).createAudit(any(Audit.class));
     }
 
     @Test
     public void entityUpdate() throws JsonProcessingException {
         auditAspect.entityUpdate(id, getEntity());
-        Mockito.verify(auditService, Mockito.times(1)).createAudit(Mockito.any(Audit.class));
+        verify(auditService, times(1)).createAudit(any(Audit.class));
     }
 
     @Test
     public void entityDelete() {
         auditAspect.entityDelete(getEntity(), id);
-        Mockito.verify(auditService, Mockito.times(1)).createAudit(Mockito.any(Audit.class));
+        verify(auditService, times(1)).createAudit(any(Audit.class));
     }
 
     private Object getEntity(){

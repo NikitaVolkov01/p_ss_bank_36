@@ -7,14 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class BankDetailsServiceImplTest {
@@ -27,7 +28,7 @@ class BankDetailsServiceImplTest {
 
     @Test
     void findOne() {
-        Mockito.when(bankDetailsRepository.findById(ID)).thenReturn(Optional.of(getListBankDetails().get(0)));
+        when(bankDetailsRepository.findById(ID)).thenReturn(Optional.of(getListBankDetails().get(0)));
 
         BankDetails result = bankDetailsService.findOne(ID);
 
@@ -37,7 +38,7 @@ class BankDetailsServiceImplTest {
 
     @Test
     void findAll() {
-        Mockito.when(bankDetailsRepository.findAll()).thenReturn(getListBankDetails());
+        when(bankDetailsRepository.findAll()).thenReturn(getListBankDetails());
 
         List<BankDetails> result = bankDetailsService.findAll();
 
@@ -48,7 +49,7 @@ class BankDetailsServiceImplTest {
     void save(){
         bankDetailsService.save(getListBankDetails().get(0));
 
-        Mockito.verify(bankDetailsRepository, Mockito.times(1)).save(getListBankDetails().get(0));
+        verify(bankDetailsRepository, times(1)).save(getListBankDetails().get(0));
     }
 
     @Test
@@ -57,7 +58,7 @@ class BankDetailsServiceImplTest {
 
         bankDetailsService.update(ID, getListBankDetails().get(0));
 
-        Mockito.verify(bankDetailsRepository).save(getListBankDetails().get(0));
+        verify(bankDetailsRepository).save(getListBankDetails().get(0));
     }
 
     @Test
@@ -70,7 +71,7 @@ class BankDetailsServiceImplTest {
     void delete() {
         bankDetailsService.delete(ID);
 
-        Mockito.verify(bankDetailsRepository, Mockito.times(1)).deleteById(ID);
+        verify(bankDetailsRepository, times(1)).deleteById(ID);
     }
 
     private List<BankDetails> getListBankDetails() {

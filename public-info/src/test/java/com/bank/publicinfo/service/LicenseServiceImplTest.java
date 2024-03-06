@@ -7,14 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 public class LicenseServiceImplTest {
@@ -28,7 +29,7 @@ public class LicenseServiceImplTest {
 
     @Test
     void findOne() {
-        Mockito.when(licenseRepository.findById(ID)).thenReturn(Optional.of(getListLicense().get(0)));
+        when(licenseRepository.findById(ID)).thenReturn(Optional.of(getListLicense().get(0)));
 
         License result = licenseServiceImpl.findOne(ID);
 
@@ -38,7 +39,7 @@ public class LicenseServiceImplTest {
 
     @Test
     void findAll() {
-        Mockito.when(licenseRepository.findAll()).thenReturn(getListLicense());
+        when(licenseRepository.findAll()).thenReturn(getListLicense());
 
         List<License> result = licenseServiceImpl.findAll();
 
@@ -49,7 +50,7 @@ public class LicenseServiceImplTest {
     void save(){
         licenseServiceImpl.save(getListLicense().get(0));
 
-        Mockito.verify(licenseRepository, Mockito.times(1)).save(getListLicense().get(0));
+        verify(licenseRepository, times(1)).save(getListLicense().get(0));
     }
 
     @Test
@@ -58,7 +59,7 @@ public class LicenseServiceImplTest {
 
         licenseServiceImpl.update(ID, getListLicense().get(0));
 
-        Mockito.verify(licenseRepository).save(getListLicense().get(0));
+        verify(licenseRepository).save(getListLicense().get(0));
     }
 
     @Test
@@ -71,7 +72,7 @@ public class LicenseServiceImplTest {
     void delete() {
         licenseServiceImpl.delete(ID);
 
-        Mockito.verify(licenseRepository, Mockito.times(1)).deleteById(ID);
+        verify(licenseRepository, times(1)).deleteById(ID);
     }
 
     private List<License> getListLicense(){

@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 import java.util.Base64;
 import java.util.List;
@@ -56,24 +59,24 @@ public class CertificateRestControllerTest {
 
     @Test
     void findOneCertificate() throws Exception {
-        Mockito.when(certificateService.findOne(ID)).thenReturn(getListCertificate().get(0));
+        when(certificateService.findOne(ID)).thenReturn(getListCertificate().get(0));
 
         mockMvc.perform(get("/certificates/{id}", ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.photo").value(base64Encoded));
 
-        Mockito.verify(certificateService, Mockito.times(1)).findOne(ID);
+        verify(certificateService, times(1)).findOne(ID);
     }
 
     @Test
     void findAllCertificates() throws Exception {
-        Mockito.when(certificateService.findAll()).thenReturn(getListCertificate());
+        when(certificateService.findAll()).thenReturn(getListCertificate());
 
         mockMvc.perform(get("/certificates"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
-        Mockito.verify(certificateService, Mockito.times(1)).findAll();
+        verify(certificateService, times(1)).findAll();
     }
 
     @Test
@@ -87,20 +90,20 @@ public class CertificateRestControllerTest {
                         .content(certificateJson))
                         .andExpect(status().isOk());
 
-        Mockito.verify(certificateService, Mockito.times(1)).save(result);
+        verify(certificateService, times(1)).save(result);
     }
 
     @Test
     void updateCertificate() {
         ResponseEntity<HttpStatus> response = certificateRestController.updateCertificate(ID, getListCertificateDTO().get(0));
-        Mockito.verify(certificateService, Mockito.times(1)).update(ID, CertificateMapper.INSTANCE.toEntity(getListCertificateDTO().get(0)));
+        verify(certificateService, times(1)).update(ID, CertificateMapper.INSTANCE.toEntity(getListCertificateDTO().get(0)));
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     void deleteCertificate() throws Exception {
         mockMvc.perform(delete("/certificates/{id}", ID)).andExpect(status().isOk());
-        Mockito.verify(certificateService, Mockito.times(1)).delete(ID);
+        verify(certificateService, times(1)).delete(ID);
     }
 
     private List<Certificate> getListCertificate(){

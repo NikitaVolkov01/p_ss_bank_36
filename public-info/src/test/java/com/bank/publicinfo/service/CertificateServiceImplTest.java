@@ -7,14 +7,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class CertificateServiceImplTest {
@@ -28,7 +29,7 @@ class CertificateServiceImplTest {
 
     @Test
     void findOne() {
-        Mockito.when(certificateRepository.findById(ID)).thenReturn(Optional.of(getListCertificate().get(0)));
+        when(certificateRepository.findById(ID)).thenReturn(Optional.of(getListCertificate().get(0)));
 
         Certificate result = certificateServiceImpl.findOne(ID);
 
@@ -38,7 +39,7 @@ class CertificateServiceImplTest {
 
     @Test
     void findAll() {
-        Mockito.when(certificateRepository.findAll()).thenReturn(getListCertificate());
+        when(certificateRepository.findAll()).thenReturn(getListCertificate());
 
         List<Certificate> result = certificateServiceImpl.findAll();
 
@@ -49,7 +50,7 @@ class CertificateServiceImplTest {
     void save(){
         certificateServiceImpl.save(getListCertificate().get(0));
 
-        Mockito.verify(certificateRepository, Mockito.times(1)).save(getListCertificate().get(0));
+        verify(certificateRepository, times(1)).save(getListCertificate().get(0));
     }
 
     @Test
@@ -58,7 +59,7 @@ class CertificateServiceImplTest {
 
         certificateServiceImpl.update(ID, getListCertificate().get(0));
 
-        Mockito.verify(certificateRepository).save(getListCertificate().get(0));
+        verify(certificateRepository).save(getListCertificate().get(0));
     }
 
     @Test
@@ -71,7 +72,7 @@ class CertificateServiceImplTest {
     void delete() {
         certificateServiceImpl.delete(ID);
 
-        Mockito.verify(certificateRepository, Mockito.times(1)).deleteById(ID);
+        verify(certificateRepository, times(1)).deleteById(ID);
     }
 
     private List<Certificate> getListCertificate(){

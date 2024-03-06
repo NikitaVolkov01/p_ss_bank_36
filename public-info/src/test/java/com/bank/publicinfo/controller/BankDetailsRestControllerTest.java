@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 import java.util.List;
 
@@ -52,7 +55,7 @@ public class BankDetailsRestControllerTest {
 
     @Test
     void findOneBankDetails() throws Exception {
-        Mockito.when(bankDetailsService.findOne(ID)).thenReturn(getListBankDetails().get(0));
+        when(bankDetailsService.findOne(ID)).thenReturn(getListBankDetails().get(0));
 
         mockMvc.perform(get("/bankDetails/{id}", ID))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -64,18 +67,18 @@ public class BankDetailsRestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.joint_stock_company").value("OAO"))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.name").value("tex"));
 
-        Mockito.verify(bankDetailsService, Mockito.times(1)).findOne(ID);
+       verify(bankDetailsService, times(1)).findOne(ID);
     }
 
     @Test
     void findAllBankDetails() throws Exception {
-        Mockito.when(bankDetailsService.findAll()).thenReturn(getListBankDetails());
+        when(bankDetailsService.findAll()).thenReturn(getListBankDetails());
 
         mockMvc.perform(get("/bankDetails"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
-        Mockito.verify(bankDetailsService, Mockito.times(1)).findAll();
+        verify(bankDetailsService, times(1)).findAll();
     }
 
     @Test
@@ -89,20 +92,20 @@ public class BankDetailsRestControllerTest {
                         .content(bankDetailsJson))
                 .andExpect(status().isOk());
 
-        Mockito.verify(bankDetailsService, Mockito.times(1)).save(result);
+        verify(bankDetailsService, times(1)).save(result);
     }
 
     @Test
     void updateBankDetails() {
         ResponseEntity<HttpStatus> response = bankDetailsRestController.updateBankDetails(ID, getListBankDetailsDTO().get(0));
-        Mockito.verify(bankDetailsService, Mockito.times(1)).update(ID, BankDetailsMapper.INSTANCE.toEntity(getListBankDetailsDTO().get(0)));
+        verify(bankDetailsService, times(1)).update(ID, BankDetailsMapper.INSTANCE.toEntity(getListBankDetailsDTO().get(0)));
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     void deleteBankDetails() throws Exception {
         mockMvc.perform(delete("/bankDetails/{id}", ID)).andExpect(status().isOk());
-        Mockito.verify(bankDetailsService, Mockito.times(1)).delete(ID);
+        verify(bankDetailsService, times(1)).delete(ID);
     }
 
     private List<BankDetails> getListBankDetails() {

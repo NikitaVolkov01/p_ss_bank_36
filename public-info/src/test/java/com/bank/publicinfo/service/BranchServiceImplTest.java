@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalTime;
@@ -15,7 +14,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class BranchServiceImplTest {
@@ -30,7 +31,7 @@ class BranchServiceImplTest {
 
     @Test
     void findOne() {
-        Mockito.when(branchRepository.findById(ID)).thenReturn(Optional.of(getListBranch().get(0)));
+        when(branchRepository.findById(ID)).thenReturn(Optional.of(getListBranch().get(0)));
 
         Branch result = branchServiceImpl.findOne(ID);
 
@@ -40,7 +41,7 @@ class BranchServiceImplTest {
 
     @Test
     void findAll() {
-        Mockito.when(branchRepository.findAll()).thenReturn(getListBranch());
+        when(branchRepository.findAll()).thenReturn(getListBranch());
 
         List<Branch> result = branchServiceImpl.findAll();
 
@@ -51,7 +52,7 @@ class BranchServiceImplTest {
     void save(){
         branchServiceImpl.save(getListBranch().get(0));
 
-        Mockito.verify(branchRepository, Mockito.times(1)).save(getListBranch().get(0));
+        verify(branchRepository, times(1)).save(getListBranch().get(0));
     }
 
     @Test
@@ -60,7 +61,7 @@ class BranchServiceImplTest {
 
         branchServiceImpl.update(ID, getListBranch().get(0));
 
-        Mockito.verify(branchRepository).save(getListBranch().get(0));
+        verify(branchRepository).save(getListBranch().get(0));
     }
 
     @Test
@@ -73,7 +74,7 @@ class BranchServiceImplTest {
     void delete() {
         branchServiceImpl.delete(ID);
 
-        Mockito.verify(branchRepository, Mockito.times(1)).deleteById(1L);
+        verify(branchRepository, times(1)).deleteById(1L);
     }
 
     private List<Branch> getListBranch() {

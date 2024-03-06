@@ -10,12 +10,13 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class AtmServiceImplTest {
@@ -50,7 +51,7 @@ class AtmServiceImplTest {
     void save(){
         atmServiceImpl.save(getListAtm().get(0));
 
-        Mockito.verify(atmRepository, Mockito.times(1)).save(getListAtm().get(0));
+        verify(atmRepository, times(1)).save(getListAtm().get(0));
     }
 
     @Test
@@ -59,7 +60,7 @@ class AtmServiceImplTest {
 
         atmServiceImpl.update(ID, getListAtm().get(0));
 
-        Mockito.verify(atmRepository).save(getListAtm().get(0));
+        verify(atmRepository).save(getListAtm().get(0));
     }
 
     @Test
@@ -72,7 +73,7 @@ class AtmServiceImplTest {
     void delete() {
         atmServiceImpl.delete(ID);
 
-        Mockito.verify(atmRepository, Mockito.times(1)).deleteById(ID);
+        verify(atmRepository, times(1)).deleteById(ID);
     }
 
     private List<Atm> getListAtm() {

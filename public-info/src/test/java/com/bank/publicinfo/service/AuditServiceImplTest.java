@@ -6,10 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.sql.Timestamp;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 public class AuditServiceImplTest {
@@ -25,14 +27,14 @@ public class AuditServiceImplTest {
     void save() {
         auditService.createAudit(getAudit());
 
-        Mockito.verify(auditRepository, Mockito.times(1)).save(getAudit());
+        verify(auditRepository, times(1)).save(getAudit());
     }
 
     @Test
     void searchCustom() {
         auditService.searchCustom();
 
-        Mockito.verify(auditRepository, Mockito.times(1)).searchCustom();
+        verify(auditRepository, times(1)).searchCustom();
     }
 
     private Audit getAudit() {

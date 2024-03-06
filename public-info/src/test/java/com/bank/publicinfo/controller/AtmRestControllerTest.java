@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
+
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -63,7 +67,7 @@ class AtmRestControllerTest {
 
         Atm atm = new Atm(1L, "Moscow", START_OF_WORK, END_OF_WORK, false, null);
 
-        Mockito.when(atmService.findOne(ID)).thenReturn(atm);
+        when(atmService.findOne(ID)).thenReturn(atm);
         mockMvc.perform(get("/atms/{id}", ID))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.address").value("Moscow"))
@@ -71,19 +75,19 @@ class AtmRestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.end_of_work").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.all_hours").value(false));
 
-        Mockito.verify(atmService, Mockito.times(1)).findOne(ID);
+        verify(atmService, times(1)).findOne(ID);
     }
 
     @Test
     void findAllAtm() throws Exception {
 
-        Mockito.when(atmService.findAll()).thenReturn(getListAtm());
+        when(atmService.findAll()).thenReturn(getListAtm());
 
         mockMvc.perform(get("/atms"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
-        Mockito.verify(atmService, Mockito.times(1)).findAll();
+        verify(atmService, times(1)).findAll();
     }
 
     @Test
@@ -96,7 +100,7 @@ class AtmRestControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(atmJson))
                 .andExpect(status().isOk());
-        Mockito.verify(atmService, Mockito.times(1)).save(result);
+        verify(atmService, times(1)).save(result);
     }
 
     @Test
@@ -108,27 +112,27 @@ class AtmRestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(atmJson))
                 .andExpect(status().isOk());
-        Mockito.verify(atmService, Mockito.times(1)).save(result);
+        verify(atmService, times(1)).save(result);
     }
 
     @Test
     void updateAtm() {
         ResponseEntity<HttpStatus> response = atmRestController.updateAtm(ID, getListAtmDTO().get(0));
-        Mockito.verify(atmService, Mockito.times(1)).update(ID, AtmMapper.INSTANCE.toEntity(getListAtmDTO().get(0)));
+        verify(atmService, times(1)).update(ID, AtmMapper.INSTANCE.toEntity(getListAtmDTO().get(0)));
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     void updateAtmAllHoursTrue() {
         ResponseEntity<HttpStatus> response = atmRestController.updateAtm(ID, getAtmDtoWithAllHoursTrue());
-        Mockito.verify(atmService, Mockito.times(1)).update(ID, AtmMapper.INSTANCE.toEntity(getAtmDtoWithAllHoursTrue()));
+        verify(atmService, times(1)).update(ID, AtmMapper.INSTANCE.toEntity(getAtmDtoWithAllHoursTrue()));
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     void deleteAtm() throws Exception {
         mockMvc.perform(delete("/atms/{id}", ID)).andExpect(status().isOk());
-        Mockito.verify(atmService, Mockito.times(1)).delete(ID);
+        verify(atmService, times(1)).delete(ID);
     }
 
     private List<AtmDTO> getListAtmDTO() {

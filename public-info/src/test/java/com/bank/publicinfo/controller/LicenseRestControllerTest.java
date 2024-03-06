@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 import java.util.Base64;
 import java.util.List;
@@ -57,24 +60,24 @@ public class LicenseRestControllerTest {
 
     @Test
     void findOneLicense() throws Exception {
-        Mockito.when(licenseService.findOne(ID)).thenReturn(getListLicense().get(0));
+        when(licenseService.findOne(ID)).thenReturn(getListLicense().get(0));
 
         mockMvc.perform(get("/licenses/{id}", ID))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.photo").value(base64Encoded));
 
-        Mockito.verify(licenseService, Mockito.times(1)).findOne(ID);
+        verify(licenseService, times(1)).findOne(ID);
     }
 
     @Test
     void findAllLicenses() throws Exception {
-        Mockito.when(licenseService.findAll()).thenReturn(getListLicense());
+        when(licenseService.findAll()).thenReturn(getListLicense());
 
         mockMvc.perform(get("/licenses"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
-        Mockito.verify(licenseService, Mockito.times(1)).findAll();
+        verify(licenseService, times(1)).findAll();
     }
 
     @Test
@@ -88,14 +91,14 @@ public class LicenseRestControllerTest {
                         .content(licenseJson))
                 .andExpect(status().isOk());
 
-        Mockito.verify(licenseService, Mockito.times(1)).save(result);
+        verify(licenseService, times(1)).save(result);
     }
 
     @Test
     void updateLicense() {
         ResponseEntity<HttpStatus> response = licenseRestController.updateLicense(ID, getListLicenseDTO().get(0));
 
-        Mockito.verify(licenseService, Mockito.times(1)).update(ID, LicenseMapper.INSTANCE.toEntity(getListLicenseDTO().get(0)));
+        verify(licenseService, times(1)).update(ID, LicenseMapper.INSTANCE.toEntity(getListLicenseDTO().get(0)));
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
@@ -104,7 +107,7 @@ public class LicenseRestControllerTest {
     void deleteLicense() throws Exception {
         mockMvc.perform(delete("/licenses/{id}", ID)).andExpect(status().isOk());
 
-        Mockito.verify(licenseService, Mockito.times(1)).delete(ID);
+        verify(licenseService, times(1)).delete(ID);
     }
 
     private List<License> getListLicense(){

@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +18,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.times;
 
 import java.time.LocalTime;
 import java.util.List;
@@ -56,7 +59,7 @@ public class BranchRestControllerTest {
 
     @Test
     void findOneBranch() throws Exception {
-        Mockito.when(branchService.findOne(ID)).thenReturn(getListBranch().get(0));
+        when(branchService.findOne(ID)).thenReturn(getListBranch().get(0));
 
         mockMvc.perform(get("/branches/{id}", ID))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -66,18 +69,18 @@ public class BranchRestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.startOfWork").isArray())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.endOfWork").isArray());
 
-        Mockito.verify(branchService, Mockito.times(1)).findOne(ID);
+        verify(branchService, times(1)).findOne(ID);
     }
 
     @Test
     void findAllBranches() throws Exception {
-        Mockito.when(branchService.findAll()).thenReturn(getListBranch());
+        when(branchService.findAll()).thenReturn(getListBranch());
 
         mockMvc.perform(get("/branches"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)));
 
-        Mockito.verify(branchService, Mockito.times(1)).findAll();
+        verify(branchService, times(1)).findAll();
     }
 
     @Test
@@ -90,20 +93,20 @@ public class BranchRestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(branchJson))
                 .andExpect(status().isOk());
-        Mockito.verify(branchService, Mockito.times(1)).save(result);
+        verify(branchService, times(1)).save(result);
     }
 
     @Test
     void updateBranch() {
         ResponseEntity<HttpStatus> response = branchRestController.updateBranch(ID, getListBranchDTO().get(0));
-        Mockito.verify(branchService, Mockito.times(1)).update(ID, BranchMapper.INSTANCE.toEntity(getListBranchDTO().get(0)));
+        verify(branchService, times(1)).update(ID, BranchMapper.INSTANCE.toEntity(getListBranchDTO().get(0)));
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     void deleteBranch() throws Exception {
         mockMvc.perform(delete("/branches/{id}", ID)).andExpect(status().isOk());
-        Mockito.verify(branchService, Mockito.times(1)).delete(ID);
+        verify(branchService, times(1)).delete(ID);
     }
 
     private List<Branch> getListBranch() {
